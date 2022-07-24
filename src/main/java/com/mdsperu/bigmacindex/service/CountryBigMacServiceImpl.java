@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -73,6 +74,17 @@ public class CountryBigMacServiceImpl implements CountryBigMacService {
     @Override
     public boolean existsByCurrency(CurrencyCode currencyCode) {
         return countryBigMacRepository.existsByCurrencyCode(currencyCode);
+    }
+
+    @Override
+    public List<String[]> getAllRates() {
+        List<CountryBigMac> resultList = countryBigMacRepository.findAll();
+        return resultList.stream()
+                .map(countryBigMac -> new String[]{
+                        countryBigMac.getCurrencyCode().name(),
+                        countryBigMac.getLastExchangeRate().toString(),
+                        countryBigMac.getLastExchangeRateUpdated().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))})
+                .toList();
     }
 
 }

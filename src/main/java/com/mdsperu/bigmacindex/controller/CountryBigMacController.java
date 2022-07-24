@@ -8,17 +8,20 @@ import com.mdsperu.bigmacindex.service.CountryBigMacServiceImpl;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Controller
 public class CountryBigMacController {
 
-    CountryBigMacServiceImpl countryBigMacServiceImpl;
+    private CountryBigMacServiceImpl countryBigMacServiceImpl;
 
     @Autowired
     public void setCountryBigMacServiceImpl(CountryBigMacServiceImpl countryBigMacServiceImpl) {
@@ -32,6 +35,11 @@ public class CountryBigMacController {
         RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.getForObject(url, String.class);
         boolean success = updateCurrencies(response);
+        if (success) {
+            log.info("Rates updated successfully");
+        } else {
+            log.error("Error updating rates");
+        }
         return response;
     }
 
@@ -48,10 +56,14 @@ public class CountryBigMacController {
                     BigDecimal exchangeRate = new BigDecimal(rate.asText());
                     if (countryBigMacServiceImpl.existsByCurrency(currencyCode)) {
                         CountryBigMac countryBigMac = countryBigMacServiceImpl.getCountryBigMacByCurrencyCode(currencyCode);
-                        countryBigMac.setLastExchangeRateUpdated(lastUpdate);
-                        countryBigMac.setLastExchangeRate(exchangeRate);
-                        countryBigMacServiceImpl.save(countryBigMac);
-                        log.warn("updating exchange rate for EXISTING country: {}", currencyCode);
+                        if (!exchangeRate.equals(countryBigMac.getLastExchangeRate())) {
+                            countryBigMac.setLastExchangeRateUpdated(lastUpdate);
+                            countryBigMac.setLastExchangeRate(exchangeRate);
+                            countryBigMacServiceImpl.save(countryBigMac);
+                            log.warn("updating exchange rate for EXISTING country: {}", currencyCode);
+                        } else {
+                            log.warn("exchange rate for EXISTING country: {} is the same", currencyCode);
+                        }
                     } else {
                         CountryBigMac countryBigMac = new CountryBigMac();
                         countryBigMac.setCurrencyCode(currencyCode);
@@ -69,5 +81,17 @@ public class CountryBigMacController {
             log.error("error updating currencies", e);
         }
         return success;
+    }
+
+    @GetMapping("/update-rates")
+    public void adminPanel() {
+        getUpdatedRatesFromApi();
+    }
+
+    @GetMapping("/rates")
+    public String showExchangeRates(Model model) {
+        List<String[]> rates = countryBigMacServiceImpl.getAllRates();
+        model.addAttribute("rates", rates);
+        return "rates-list";
     }
 }

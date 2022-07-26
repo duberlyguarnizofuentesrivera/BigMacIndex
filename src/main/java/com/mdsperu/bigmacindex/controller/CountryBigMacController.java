@@ -94,4 +94,11 @@ public class CountryBigMacController {
         model.addAttribute("rates", rates);
         return "rates-list";
     }
+    @GetMapping("/rates/{currencySign}")
+    public String showSpecificExchangeRate(Model model, @org.springframework.web.bind.annotation.PathVariable String currencySign) {
+        CountryBigMac country = countryBigMacServiceImpl.getCountryBigMacByCurrencyCode(CurrencyCode.valueOf(currencySign.toUpperCase()));
+        model.addAttribute("country", country);
+
+        return "rate-for-country";
+    }
 }

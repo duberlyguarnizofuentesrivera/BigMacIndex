@@ -23,7 +23,7 @@
         <tr>
           <td th:text="${country.getCurrencyCode().name()}"></td>
           <td th:text="${country.getLastExchangeRate().toString()}"></td>
-          <td th:text="${country.getLastExchangeRateUpdated().toString()}"></td>
+          <td th:text="${#temporals.format(country.getLastExchangeRateUpdated(), 'HH:MM dd/MM/yyyy')}"></td>
         </tr>
         </tbody>
       </table>

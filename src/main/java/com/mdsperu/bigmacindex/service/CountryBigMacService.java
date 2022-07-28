@@ -19,7 +19,7 @@ public interface CountryBigMacService {
 
     void save(CountryBigMac countryBigMac);
 
-    boolean existsByCurrency(CurrencyCode currencyCode);
+    boolean existsByCurrencyCode(CurrencyCode currencyCode);
 
-    List<String[]> getAllRates();
+    List<CountryBigMac> getAllRates();
 }

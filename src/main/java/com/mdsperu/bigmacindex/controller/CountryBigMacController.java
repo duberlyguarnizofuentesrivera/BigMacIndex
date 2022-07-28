@@ -54,7 +54,7 @@ public class CountryBigMacController {
                 JsonNode rate = rates.get(currencyCode.name());
                 if (rate != null) {
                     BigDecimal exchangeRate = new BigDecimal(rate.asText());
-                    if (countryBigMacServiceImpl.existsByCurrency(currencyCode)) {
+                    if (countryBigMacServiceImpl.existsByCurrencyCode(currencyCode)) {
                         CountryBigMac countryBigMac = countryBigMacServiceImpl.getCountryBigMacByCurrencyCode(currencyCode);
                         if (!exchangeRate.equals(countryBigMac.getLastExchangeRate())) {
                             countryBigMac.setLastExchangeRateUpdated(lastUpdate);
@@ -90,7 +90,7 @@ public class CountryBigMacController {
 
     @GetMapping("/rates")
     public String showExchangeRates(Model model) {
-        List<String[]> rates = countryBigMacServiceImpl.getAllRates();
+        List<CountryBigMac> rates = countryBigMacServiceImpl.getAllRates();
         model.addAttribute("rates", rates);
         return "rates-list";
     }

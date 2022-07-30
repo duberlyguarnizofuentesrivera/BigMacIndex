@@ -57,9 +57,10 @@
             <form><label class="form-label">If you know the price for the Big Mac in your country, please help us by
                 telling us (in your local currency)<select class="form-select">
                     <optgroup label="Select Country">
-                        <option selected="" value="12">This is item 1</option>
-                        <option value="13">This is item 2</option>
-                        <option value="14">This is item 3</option>
+                        <!--/*@thymesVar id="country" type="com.mdsperu.bigmacindex.enums.CountryCode"*/-->
+                        <option th:each="country : ${countryCodeList}"
+                                th:text="${country.getCountryName()}"
+                                th:value="${country.getIsoCodeAlpha2()}"></option>
                     </optgroup>
                 </select></label><label class="form-label">Cost of Big Mac:<input class="form-control"
                                                                                   type="text"></label>

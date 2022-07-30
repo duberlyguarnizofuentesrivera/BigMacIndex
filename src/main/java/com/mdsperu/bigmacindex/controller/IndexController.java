@@ -1,5 +1,6 @@
 package com.mdsperu.bigmacindex.controller;
 
+import com.mdsperu.bigmacindex.enums.CountryCode;
 import com.mdsperu.bigmacindex.model.CountryBigMac;
 import com.mdsperu.bigmacindex.service.CountryBigMacServiceImpl;
 import org.slf4j.Logger;
@@ -23,8 +24,9 @@ public class IndexController {
     public String index(Model model) {
 
         List<CountryBigMac> currencyList = countryBigMacServiceImpl.getAllRates();
-
+        List<CountryCode> countryCodeList = List.of(CountryCode.values());
         model.addAttribute("currencyList", currencyList);
+        model.addAttribute("countryCodeList", countryCodeList);
         return "index";
     }
 }

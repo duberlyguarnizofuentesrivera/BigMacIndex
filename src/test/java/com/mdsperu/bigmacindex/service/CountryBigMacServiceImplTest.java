@@ -1,6 +1,5 @@
 package com.mdsperu.bigmacindex.service;
 
-import com.mdsperu.bigmacindex.enums.Country;
 import com.mdsperu.bigmacindex.enums.CurrencyCode;
 import com.mdsperu.bigmacindex.model.CountryBigMac;
 import org.junit.jupiter.api.BeforeEach;

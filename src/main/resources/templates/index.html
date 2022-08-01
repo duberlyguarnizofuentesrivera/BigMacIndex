@@ -46,10 +46,11 @@
         <div class="col-md-6">
             <form><label class="form-label">Select a country to see it's BMI:<select class="form-select">
                 <optgroup label="Select Currency">
-                    <!--/*@thymesVar id="currency" type="com.mdsperu.bigmacindex.model.CountryBigMac"*/-->
-                    <option th:each="currency : ${currencyList}"
-                            th:text="${currency.getCurrencyCode().getName() + ' ' + currency.getCurrencyCode().getUnicode()}"
-                            th:value="${currency.getCurrencyCode().getCode()}"></option>
+                    <!--/*@thymesVar id="country" type="com.mdsperu.bigmacindex.enums.CountryCode"*/-->
+                    <option th:each="country : ${countryCodeList}"
+                            th:text="${country.getCountryName() + ' (' + country.getCurrencyCode()+ ')'}"></option>
+                    th:value="${country.getIsoCodeAlpha2()}"></option>
+                </optgroup>
                 </optgroup>
             </select></label></form>
         </div>

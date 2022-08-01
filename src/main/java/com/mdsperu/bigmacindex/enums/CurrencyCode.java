@@ -345,7 +345,7 @@ public enum CurrencyCode {
      * Gets the UTF16-BE representation of the symbol.
      */
     public String getUnicode() {
-        return unicode;
+        return unicode == null ? "no symbol" : unicode;
     }
 
     /**
@@ -368,15 +368,15 @@ public enum CurrencyCode {
     @Override
     public String toString() {
 
-        StringBuffer buf = new StringBuffer();
-        buf.append(name);
-        buf.append(" (").append(getIsoCodeAlpha3()).append(", ").append(getCodeAsString()).append(")");
-        buf.append(", sign ").append(isSignBefore() ? "before" : "after").append(" amount");
-        buf.append(", symbol: ").append(symbol);
-        if (latinSymbol != null) buf.append(", Latin symbol: ").append(latinSymbol);
-        if (alternateSymbol != null) buf.append(", alternate symbol: ").append(alternateSymbol);
+        StringBuilder builder = new StringBuilder();
+        builder.append(name);
+        builder.append(" (").append(getIsoCodeAlpha3()).append(", ").append(getCodeAsString()).append(")");
+        builder.append(", sign ").append(isSignBefore() ? "before" : "after").append(" amount");
+        builder.append(", symbol: ").append(symbol);
+        if (latinSymbol != null) builder.append(", Latin symbol: ").append(latinSymbol);
+        if (alternateSymbol != null) builder.append(", alternate symbol: ").append(alternateSymbol);
 
-        return buf.toString();
+        return builder.toString();
 
     }
 

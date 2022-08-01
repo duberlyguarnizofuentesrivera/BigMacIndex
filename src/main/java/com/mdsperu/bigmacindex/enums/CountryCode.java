@@ -1062,7 +1062,7 @@ public enum CountryCode {
      * Gets the default ISO 4217 Currency Code for this country, by convention the first in the list.
      */
     public CurrencyCode getCurrencyCode() {
-        return currencies.get(0);
+        return currencies == null ? null : currencies.get(0);
     }
 
     /**

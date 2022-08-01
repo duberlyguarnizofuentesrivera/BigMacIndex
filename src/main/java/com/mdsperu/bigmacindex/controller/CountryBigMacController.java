@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
@@ -19,6 +20,7 @@ import java.util.List;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Controller
+@RequestMapping("/rates")
 public class CountryBigMacController {
 
     private CountryBigMacServiceImpl countryBigMacServiceImpl;
@@ -54,7 +56,7 @@ public class CountryBigMacController {
                 JsonNode rate = rates.get(currencyCode.name());
                 if (rate != null) {
                     BigDecimal exchangeRate = new BigDecimal(rate.asText());
-                    if (countryBigMacServiceImpl.existsByCurrency(currencyCode)) {
+                    if (countryBigMacServiceImpl.existsByCurrencyCode(currencyCode)) {
                         CountryBigMac countryBigMac = countryBigMacServiceImpl.getCountryBigMacByCurrencyCode(currencyCode);
                         if (!exchangeRate.equals(countryBigMac.getLastExchangeRate())) {
                             countryBigMac.setLastExchangeRateUpdated(lastUpdate);
@@ -83,15 +85,23 @@ public class CountryBigMacController {
         return success;
     }
 
-    @GetMapping("/update-rates")
+    @GetMapping("/update-all")
     public void adminPanel() {
         getUpdatedRatesFromApi();
     }
 
-    @GetMapping("/rates")
+    @GetMapping("/all")
     public String showExchangeRates(Model model) {
-        List<String[]> rates = countryBigMacServiceImpl.getAllRates();
+        List<CountryBigMac> rates = countryBigMacServiceImpl.getAllRates();
         model.addAttribute("rates", rates);
         return "rates-list";
+    }
+
+    @GetMapping("/rate/{currencySign}")
+    public String showSpecificExchangeRate(Model model, @org.springframework.web.bind.annotation.PathVariable String currencySign) {
+        CountryBigMac country = countryBigMacServiceImpl.getCountryBigMacByCurrencyCode(CurrencyCode.valueOf(currencySign.toUpperCase()));
+        model.addAttribute("country", country);
+
+        return "rate-for-country";
     }
 }

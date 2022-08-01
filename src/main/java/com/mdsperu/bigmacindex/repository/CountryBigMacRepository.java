@@ -1,6 +1,5 @@
 package com.mdsperu.bigmacindex.repository;
 
-import com.mdsperu.bigmacindex.enums.Country;
 import com.mdsperu.bigmacindex.enums.CurrencyCode;
 import com.mdsperu.bigmacindex.model.CountryBigMac;
 import org.springframework.data.jpa.repository.JpaRepository;

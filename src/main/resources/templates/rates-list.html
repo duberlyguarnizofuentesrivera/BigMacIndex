@@ -25,9 +25,11 @@
                 </tr>
 
                 <tr th:each="rate: ${rates}">
-                    <td th:text="${rate[0]}"></td>
-                    <td th:text="${rate[1]}"></td>
-                    <td th:text="${rate[2]}"></td>
+                    <td><span th:text="${rate.getCurrencyCode().getName()}"></span> (<span
+                            th:text="${rate.getCurrencyCode().getUnicode()}"></span>)
+                    </td>
+                    <td th:text="${rate.getLastExchangeRate()}"></td>
+                    <td th:text="${#temporals.format(rate.getLastExchangeRateUpdated(), 'dd-MM-YYYY HH:mm')}"></td>
                 </tr>
                 </tbody>
             </table>
